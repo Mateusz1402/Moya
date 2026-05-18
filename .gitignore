@@ -1,0 +1,80 @@
+# ====================================================================
+# SYSTEM & IDE FILES (Global Monorepo Rules)
+# ====================================================================
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse / STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### System Files ###
+.DS_Store
+Thumbs.db
+
+# ====================================================================
+# BACKEND MODULE (Java / Maven)
+# ====================================================================
+
+# Ignoruj skompilowany kod i paczki .jar/.war
+backend/target/
+backend/build/
+
+# Ignoruj lokalne logi uruchomieniowe aplikacji
+backend/*.log
+
+# Opcjonalnie: Jeśli używasz Maven Wrapper (zostaw odkomentowane, jeśli nie chcesz wysyłać binarnego .jar do wrapper)
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Wyjątki dla struktury Mavena (zabezpieczenie)
+!**/backend/src/main/**/target/
+!**/backend/src/test/**/target/
+
+
+# ====================================================================
+# FRONTEND MODULE (React / Vite / TypeScript)
+# ====================================================================
+
+# Ignoruj gigantyczny folder z pobranymi bibliotekami npm
+frontend/node_modules/
+
+# Ignoruj folder produkcyjny (zbudowaną aplikację produkcyjną HTML/JS)
+frontend/dist/
+
+# Ignoruj lokalne pliki ze zmiennymi środowiskowymi (hasła, klucze API)
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Ignoruj pliki tymczasowe testów i logów npm
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.eslintcache
+frontend/.stylelintcache
