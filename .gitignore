@@ -38,6 +38,8 @@ bin/
 .DS_Store
 Thumbs.db
 
+/temporary/*
+
 # ====================================================================
 # BACKEND MODULE (Java / Maven)
 # ====================================================================
@@ -56,6 +58,7 @@ backend/.mvn/wrapper/maven-wrapper.jar
 !**/backend/src/main/**/target/
 !**/backend/src/test/**/target/
 
+/backend/src/main/resources/application.yaml
 
 # ====================================================================
 # FRONTEND MODULE (React / Vite / TypeScript)
@@ -78,3 +81,6 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 frontend/.eslintcache
 frontend/.stylelintcache
+
+
+
