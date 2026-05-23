@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getTanks, getPumps } from '../api/fuelApi';
 import type { TankDto, PumpDto } from '../api/fuelApi';
+import '../App.css';
 
 export default function Dashboard() {
   const [tanks, setTanks] = useState<TankDto[]>([]);

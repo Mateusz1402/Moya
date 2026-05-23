@@ -24,6 +24,11 @@ export default function Layout() {
               Pumps
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/products" className={({ isActive }) => isActive ? 'active' : ''}>
+              Products
+            </NavLink>
+          </li>
         </ul>
       </nav>
       <main className="main-content">

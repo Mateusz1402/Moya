@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import TanksPage from './pages/TanksPage';
 import PumpsPage from './pages/PumpsPage';
+import ProductsPage from './pages/ProductsPage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="tanks" element={<TanksPage />} />
           <Route path="pumps" element={<PumpsPage />} />
+          <Route path="products" element={<ProductsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

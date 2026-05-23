@@ -4,6 +4,8 @@ import {
   dispenseFuel, getTanks, createPumpHose, deletePumpHose,
 } from '../api/fuelApi';
 import type { PumpDto, TankDto, DispenseFuelResponse } from '../api/fuelApi';
+import Dropdown from "../components/Dropdown.tsx";
+const FUELTYPES = ['Pb95', 'ON'];
 
 export default function PumpsPage() {
   const [pumps, setPumps] = useState<PumpDto[]>([]);
@@ -237,25 +239,11 @@ export default function PumpsPage() {
             <form onSubmit={handleCreateHose}>
               <div className="form-group">
                 <label htmlFor="hose-tank">Tank</label>
-                <select
-                  id="hose-tank"
-                  value={hoseForm.tankId}
-                  onChange={e => {
-                    const tank = tanks.find(t => t.id === Number(e.target.value));
-                    setHoseForm({
-                      ...hoseForm,
-                      tankId: Number(e.target.value),
-                      fuelType: tank?.fuelType ?? hoseForm.fuelType,
-                    });
-                  }}
-                  required
-                >
-                  {tanks.map(tank => (
-                    <option key={tank.id} value={tank.id}>
-                      {tank.fuelType} (Tank #{tank.id} — {tank.currentLevelLitres}L / {tank.capacityLitres}L)
-                    </option>
-                  ))}
-                </select>
+                <Dropdown
+                    value={hoseForm.fuelType}
+                    options={FUELTYPES}
+                    onChange={(val) => setHoseForm({...hoseForm, fuelType: val})}
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="hose-fuel-type">Fuel Type Label</label>

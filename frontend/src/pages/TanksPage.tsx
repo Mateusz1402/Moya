@@ -63,6 +63,7 @@ export default function TanksPage() {
               step="0.01"
               value={form.capacityLitres || ''}
               onChange={e => setForm({ ...form, capacityLitres: parseFloat(e.target.value) || 0 })}
+              placeholder="e.g. 1000"
               required
             />
           </div>
@@ -74,6 +75,7 @@ export default function TanksPage() {
               step="0.01"
               value={form.currentLevelLitres || ''}
               onChange={e => setForm({ ...form, currentLevelLitres: parseFloat(e.target.value) || 0 })}
+              placeholder="e.g. 1000"
               required
             />
           </div>
@@ -81,41 +83,33 @@ export default function TanksPage() {
         </form>
       )}
 
-      <div className="table-container">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Fuel Type</th>
-              <th>Capacity</th>
-              <th>Current Level</th>
-              <th>Fill %</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tanks.map(tank => (
-              <tr key={tank.id}>
-                <td>{tank.id}</td>
-                <td><span className="fuel-badge">{tank.fuelType}</span></td>
-                <td>{tank.capacityLitres} L</td>
-                <td>{tank.currentLevelLitres} L</td>
-                <td>
-                  <div className="inline-bar">
-                    <div
-                      className={`inline-bar-fill ${tank.fillPercentage < 20 ? 'low' : tank.fillPercentage < 50 ? 'medium' : 'high'}`}
-                      style={{ width: `${tank.fillPercentage}%` }}
-                    />
-                    <span>{tank.fillPercentage}%</span>
-                  </div>
-                </td>
-                <td>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(tank.id)}>Delete</button>
-                </td>
-              </tr>
+      <div className="tanks-grid">
+        {tanks.map(tank => (
+            <div className="tank-detail-card">
+              <div className="tank-detail-header">
+                <h3>Tank {tank.id}</h3>
+                <span className="tank-fueltype-badge">
+                  {tank.fuelType}
+                </span>
+              </div>
+              <div className="tank-bar-track">
+                <div className={`tank-bar-fill ${tank.fillPercentage < 20 ? 'low' : tank.fillPercentage < 50 ? 'medium' : 'high'}`}
+                     style={{width: `${tank.fillPercentage}%`}}>
+                </div>
+              </div>
+              <span className="tank-bar-percent">{tank.fillPercentage}%</span>
+              <div>
+                <span className="tank-fueltype-badge">Current capacity: {tank.currentLevelLitres} L</span>
+              </div>
+              <div>
+                <span className="tank-fueltype-badge">Total capacity: {tank.capacityLitres} L</span>
+              </div>
+              <div className="tank-delete-action">
+                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(tank.id)}>Delete</button>
+              </div>
+
+            </div>
             ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );
