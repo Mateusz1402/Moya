@@ -72,8 +72,10 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id){
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new BusinessLogicException("Can not find product with such id " + id));
+        if(!productRepository.existsById(id)){
+            throw new ResourceNotFoundException("Can not find product of such id " + id);
+        }
+        productRepository.deleteById(id);
     }
 
 

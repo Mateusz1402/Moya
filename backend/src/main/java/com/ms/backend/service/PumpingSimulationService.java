@@ -1,14 +1,24 @@
 package com.ms.backend.service;
 
+import com.ms.backend.dto.CreateReceiptItemRequest;
+import com.ms.backend.dto.CreateReceiptRequest;
+import com.ms.backend.dto.ReceiptDto;
+import com.ms.backend.dto.ReceiptItemDto;
 import com.ms.backend.model.Pump;
 import com.ms.backend.model.Tank;
+import com.ms.backend.model.PumpHose;
+import com.ms.backend.repository.PumpHoseRepository;
 import com.ms.backend.repository.PumpRepository;
+import com.ms.backend.repository.ReceiptRepository;
 import com.ms.backend.repository.TankRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ms.backend.service.ReceiptItemService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PumpingSimulationService {
@@ -18,17 +28,28 @@ public class PumpingSimulationService {
     private static final String PUMP_STATUS_AVAILABLE = "AVAILABLE";
 
     private final PumpRepository pumpRepository;
+    private final PumpHoseRepository pumpHoseRepository;
     private final TankRepository tankRepository;
+    private final ReceiptRepository receiptRepository;
+    private final ReceiptItemService receiptItemService;
+    private final ReceiptService receiptService;
 
-    public PumpingSimulationService(PumpRepository pumpRepository, TankRepository tankRepository) {
+    public PumpingSimulationService(PumpRepository pumpRepository,
+                                    PumpHoseRepository pumpHoseRepository,
+                                    TankRepository tankRepository,
+                                    ReceiptItemService receiptItemService,
+                                    ReceiptService receiptService,
+                                    ReceiptRepository receiptRepository
+                                    ) {
         this.pumpRepository = pumpRepository;
+        this.pumpHoseRepository = pumpHoseRepository;
         this.tankRepository = tankRepository;
+        this.receiptItemService = receiptItemService;
+        this.receiptService = receiptService;
+        this.receiptRepository = receiptRepository;
     }
 
-    /**
-     * Simulates the fuel pumping process asynchronously.
-     * Waits for the calculated duration, then decreases tank level and sets pump back to AVAILABLE.
-     */
+
     @Async
     public void simulatePumping(Long pumpId, Long tankId, BigDecimal litres) {
         long durationMs = calculateDurationMs(litres);
@@ -59,6 +80,33 @@ public class PumpingSimulationService {
             pump.setPumpStatus(PUMP_STATUS_AVAILABLE);
             pumpRepository.save(pump);
         }
+
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        List<PumpHose> hoses = pumpHoseRepository.findByPumpId(pump.getId());
+        for(PumpHose hose : hoses){
+            if(hose.getTank().getId().equals(tank.getId())){
+                totalPrice = hose.getPricePerLiter().multiply(litres);
+            }
+        }
+
+        CreateReceiptRequest receiptRequest = new CreateReceiptRequest(
+                LocalDateTime.now(),
+                "CARD",
+                totalPrice,
+                1L
+                );
+
+        ReceiptDto receipt = receiptService.createReceipt(receiptRequest);
+
+        CreateReceiptItemRequest request = new CreateReceiptItemRequest(
+                receipt.id(),
+                null,
+                pumpId,
+                litres,
+                totalPrice.divide(litres),
+                totalPrice);
+
+        receiptItemService.createReceiptItem(request);
     }
 
     public long calculateDurationSeconds(BigDecimal litres) {

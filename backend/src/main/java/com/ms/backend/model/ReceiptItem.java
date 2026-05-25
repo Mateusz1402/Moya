@@ -20,11 +20,11 @@ public class ReceiptItem {
     private Receipt receipt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pump_id", nullable = false)
+    @JoinColumn(name = "pump_id", nullable = true)
     private Pump pump;
 
     @Column(name = "quantity", nullable = false, precision = 10, scale = 2)
